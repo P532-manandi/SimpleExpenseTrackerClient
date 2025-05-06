@@ -67,7 +67,6 @@ export default function HomePage() {
         fetchCategories(),
         fetchFinancialStatus(),
       ]);
-      console.log(yearlySummary);
       setMonthlySummaryData(monthlySummary);
       setYearlySummaryData(yearlySummary);
       setTransactions(transactionsData);
@@ -103,30 +102,50 @@ export default function HomePage() {
 
       <main className="w-full max-w-4xl">
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">
+          {/* --- Top Row of the Card: Monthly Summary Title and Financial Status Pill --- */}
+          <div className="flex justify-between items-center mb-3">
+            {" "}
+            {/* Adjusted bottom margin */}
+            <h2 className="text-xl font-semibold text-gray-700">
               Current Month Summary
             </h2>
+            {/* Financial Status Pill moved here to be on the top right of this line */}
+            <FinancialStatusDisplay
+              status={financialStatus}
+              isLoading={isLoadingStatus}
+            />
           </div>
+          {/* Monthly data display remains directly under its title's container */}
           <MonthlySummaryDisplay
             summaryData={monthlySummaryData}
             isLoading={isLoadingSummary}
           />
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">
-              Current Year Summary
-            </h2>
+          {/* --- End Monthly Summary Block --- */}
+
+          {/* Visual Separator */}
+          <hr className="my-6 border-gray-200" />
+
+          {/* --- Yearly Summary Block --- */}
+          <div className="mb-6">
+            {" "}
+            {/* Kept margin-bottom for this block */}
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-xl font-semibold text-gray-700">
+                Current Year Summary
+              </h2>
+              {/* If you had a specific status/icon for yearly, it could go here */}
+            </div>
+            <YearlySummaryDisplay
+              summaryData={yearlySummaryData} // Make sure this data is fetched and available
+              isLoading={isLoadingSummary} // Make sure this loading state is managed
+            />
           </div>
-          <YearlySummaryDisplay
-            summaryData={yearlySummaryData}
-            isLoading={isLoadingSummary}
-          />
-          <FinancialStatusDisplay
-            status={financialStatus}
-            isLoading={isLoadingStatus}
-          />
+          {/* --- End Yearly Summary Block --- */}
+
+          {/* The FinancialStatusDisplay was previously here at the very bottom, now it's at the top right. */}
         </section>
 
+        {/* Add Transaction Button Section */}
         <section className="mb-8 flex justify-center sm:justify-end">
           <button
             onClick={handleOpenModal}
@@ -135,10 +154,13 @@ export default function HomePage() {
             + Add New Transaction
           </button>
         </section>
+
+        {/* Error Display Section */}
         {error && (
           <p className="text-red-500 text-center mb-4">Error: {error}</p>
         )}
 
+        {/* Transaction List Section */}
         <section className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Transaction List
@@ -149,7 +171,6 @@ export default function HomePage() {
           />
         </section>
       </main>
-
       <AddTransactionModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
