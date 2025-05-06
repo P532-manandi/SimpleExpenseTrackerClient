@@ -4,12 +4,13 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   fetchMonthlySummary,
+  fetchYearlySummary,
   fetchTransactions,
   fetchCategories,
   fetchFinancialStatus,
 } from "@/lib/api"; // Adjust the import path as necessary
 import {
-  type MonthlySummaryData,
+  type PeriodicSummaryData,
   type TransactionOutput,
   type CategoryListData,
   type FinancialStatusData,
@@ -20,11 +21,13 @@ import MonthlySummaryDisplay from "@/components/MonthlySummaryDisplay";
 import FinancialStatusDisplay from "@/components/FinancialStatusDisplay";
 import TransactionList from "@/components/TransactionList";
 import AddTransactionModal from "@/components/AddTransactionModal";
+import YearlySummaryDisplay from "@/components/YearlySummaryDisplay";
 
 export default function HomePage() {
-  const [summaryData, setSummaryData] = useState<MonthlySummaryData | null>(
-    null
-  );
+  const [monthlySummaryData, setMonthlySummaryData] =
+    useState<PeriodicSummaryData | null>(null);
+  const [yearlySummaryData, setYearlySummaryData] =
+    useState<PeriodicSummaryData | null>(null);
   const [transactions, setTransactions] = useState<TransactionOutput[]>([]);
   const [categories, setCategories] = useState<CategoryListData | null>(null);
   const [financialStatus, setFinancialStatus] = useState<string | null>(null);
@@ -45,18 +48,28 @@ export default function HomePage() {
     setError(null);
 
     try {
-      const [summary, transactionsData, categoriesData, statusData]: [
-        MonthlySummaryData, // Assuming MonthlySummaryData is imported and used for summary
+      const [
+        monthlySummary,
+        yearlySummary,
+        transactionsData,
+        categoriesData,
+        statusData,
+      ]: [
+        PeriodicSummaryData, // Assuming MonthlySummaryData is imported and used for summary
+        PeriodicSummaryData,
         TransactionOutput[], // Assuming TransactionOutput is imported and used for transactionsData
         CategoryListData, // Assuming CategoryListData is imported and used for categoriesData
         FinancialStatusData // Explicitly use the FinancialStatusData type here
       ] = await Promise.all([
         fetchMonthlySummary(),
+        fetchYearlySummary(),
         fetchTransactions(),
         fetchCategories(),
         fetchFinancialStatus(),
       ]);
-      setSummaryData(summary);
+      console.log(yearlySummary);
+      setMonthlySummaryData(monthlySummary);
+      setYearlySummaryData(yearlySummary);
       setTransactions(transactionsData);
       setCategories(categoriesData);
       setFinancialStatus(statusData.financialStatus);
@@ -94,14 +107,23 @@ export default function HomePage() {
             <h2 className="text-2xl font-semibold text-gray-700">
               Current Month Summary
             </h2>
-            <FinancialStatusDisplay
-              status={financialStatus}
-              isLoading={isLoadingStatus}
-            />
           </div>
           <MonthlySummaryDisplay
-            summaryData={summaryData}
+            summaryData={monthlySummaryData}
             isLoading={isLoadingSummary}
+          />
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-semibold text-gray-700">
+              Current Year Summary
+            </h2>
+          </div>
+          <YearlySummaryDisplay
+            summaryData={yearlySummaryData}
+            isLoading={isLoadingSummary}
+          />
+          <FinancialStatusDisplay
+            status={financialStatus}
+            isLoading={isLoadingStatus}
           />
         </section>
 

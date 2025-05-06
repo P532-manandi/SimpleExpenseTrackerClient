@@ -1,19 +1,19 @@
-// src/components/MonthlySummaryDisplay.tsx
 import type { PeriodicSummaryData } from "@/types";
 
-interface MonthlySummaryDisplayProps {
+interface YearlySummaryDisplayProps {
   summaryData: PeriodicSummaryData | null;
   isLoading: boolean;
 }
 
-export default function MonthlySummaryDisplay({
+export default function YearlySummaryDisplay({
   summaryData,
   isLoading,
-}: MonthlySummaryDisplayProps) {
+}: YearlySummaryDisplayProps) {
   if (isLoading) {
     return <p className="text-center text-gray-500">Loading summary...</p>;
   }
   if (!summaryData) {
+    console.log(summaryData);
     return (
       <p className="text-center text-red-500">Could not load summary data.</p>
     );

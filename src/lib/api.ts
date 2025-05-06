@@ -2,11 +2,12 @@
 import type {
   TransactionInput,
   TransactionOutput,
-  MonthlySummaryData,
+  PeriodicSummaryData,
   CategoryListData,
   FinancialStatusData,
   ApiCategoryResponse,
   ApiMonthlySummaryResponse,
+  ApiYearlySummaryResponse,
   ApiTransactionsResponse,
   ApiAddTransactionResponse,
   ApiErrorResponse,
@@ -52,10 +53,15 @@ export async function fetchTransactions(): Promise<TransactionOutput[]> {
   return data.transactions;
 }
 
-export async function fetchMonthlySummary(): Promise<MonthlySummaryData> {
+export async function fetchMonthlySummary(): Promise<PeriodicSummaryData> {
   const response = await fetch(`${API_BASE_URL}/reports/monthly-summary`);
   const data = await handleResponse<ApiMonthlySummaryResponse>(response);
   return data.monthlySummary;
+}
+export async function fetchYearlySummary(): Promise<PeriodicSummaryData> {
+  const response = await fetch(`${API_BASE_URL}/reports/yearly-summary`);
+  const data = await handleResponse<ApiYearlySummaryResponse>(response);
+  return data.yearlySummary;
 }
 
 export async function fetchFinancialStatus(): Promise<FinancialStatusData> {

@@ -17,7 +17,7 @@ export interface TransactionOutput {
   description?: string;
 }
 
-export interface MonthlySummaryData {
+export interface PeriodicSummaryData {
   income: number; // Changed from totalIncome
   expenses: number; // Changed from totalExpenses
   net: number; // Changed from netAmount
@@ -44,7 +44,11 @@ export interface FinancialStatusData {
 }
 
 export interface ApiMonthlySummaryResponse {
-  monthlySummary: MonthlySummaryData;
+  monthlySummary: PeriodicSummaryData;
+}
+
+export interface ApiYearlySummaryResponse {
+  yearlySummary: PeriodicSummaryData;
 }
 
 export interface ApiTransactionsResponse {
